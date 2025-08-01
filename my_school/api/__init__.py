@@ -1,3 +1,3 @@
-__all__ = ("router_user",)
+__all__ = ("router_student",)
 
-from .user import router as router_user
+from .student import router as router_student
