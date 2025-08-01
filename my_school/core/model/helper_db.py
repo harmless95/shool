@@ -1,4 +1,5 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from typing import AsyncGenerator
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
 from core.config import setting
 
@@ -26,14 +27,17 @@ class HelperDb:
             expire_on_commit=False,
         )
 
-    async def session_getter(self):
+    async def dispose(self) -> None:
+        await self.async_engine.dispose()
+
+    async def session_getter(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.fabric_session() as session:
             yield session
             await session.close()
 
 
 db_helper = HelperDb(
-    url=setting.db.url,
+    url=str(setting.db.url),
     echo=setting.db.echo,
     echo_pool=setting.db.echo_pool,
     pool_size=setting.db.pool_size,
