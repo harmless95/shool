@@ -1,4 +1,11 @@
 services:
+  app:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    ports:
+      - "5353:8000"
+
   pg:
     image: postgres
     environment:
