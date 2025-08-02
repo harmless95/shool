@@ -15,9 +15,9 @@ RUN poetry install
 
 COPY my_school .
 
-RUN chmod +x prestart.sh
-RUN chmod +x main
-
-ENTRYPOINT ["./prestart.sh"]
+#RUN chmod +x prestart.sh
+#RUN chmod +x main
+#
+#ENTRYPOINT ["./prestart.sh"]
 
 CMD ["python", "main.py"]
