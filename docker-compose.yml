@@ -3,6 +3,8 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./
+    environment:
+      APP_CONFIG__DB__URL: postgresql+asyncpg://user:qwer@pg:5432/school
     ports:
       - "5353:8000"
 
