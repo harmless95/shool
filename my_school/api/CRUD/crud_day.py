@@ -1,5 +1,6 @@
 from typing import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy import select
 from fastapi import HTTPException, status
 
@@ -8,7 +9,14 @@ from core.schemas.schema_day import SchemaDayCreate
 
 
 async def get_day_all(session: AsyncSession) -> Sequence[DaySchool]:
-    stmt = select(DaySchool).order_by(DaySchool.id)
+    stmt = (
+        select(DaySchool)
+        .options(
+            selectinload(DaySchool.student),
+            selectinload(DaySchool.subject),
+        )
+        .order_by(DaySchool.id)
+    )
     result = await session.scalars(stmt)
     return result.all()
 
