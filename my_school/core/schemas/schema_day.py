@@ -28,3 +28,5 @@ class SchemaDayCreate(SchemaDayBase):
 class SchemaDayUpdate(SchemaDayBase):
     day: date | None = None
     school_assessment: int | None = None
+    student: Optional[StudentBase] | None = None
+    subject: Optional[SchoolSubjectBase] | None = None
