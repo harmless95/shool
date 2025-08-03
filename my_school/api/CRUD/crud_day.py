@@ -1,11 +1,26 @@
 from typing import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 from fastapi import HTTPException, status
 
 from core.model import DaySchool, Student, SchoolSubject
 from core.schemas.schema_day import SchemaDayCreate, SchemaDayRead
+
+
+async def get_day_by_id(
+    session: AsyncSession,
+    id_day,
+):
+    stmt = select(DaySchool).where(DaySchool.id == id_day)
+    result = await session.scalars(stmt)
+    day = result.first()
+    if not day:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="invalid day by id",
+        )
+    return day
 
 
 async def get_day_all(session: AsyncSession) -> Sequence[DaySchool]:
@@ -18,6 +33,11 @@ async def get_day_all(session: AsyncSession) -> Sequence[DaySchool]:
         .order_by(DaySchool.id)
     )
     result = await session.scalars(stmt)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="invalid day",
+        )
     return result.all()
 
 
