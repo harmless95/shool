@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.model import db_helper
-from .CRUD.crud_day import get_day_all, create_day
+from .CRUD.crud_day import get_day_all, create_day, get_day_by_id
 from core.schemas.schema_day import SchemaDayCreate, SchemaDayBase, SchemaDayRead
 
 router = APIRouter(prefix="/day", tags=["Day"])
@@ -21,6 +21,14 @@ async def get_all_day(
 ):
     days = await get_day_all(session=session)
     return [SchemaDayRead.model_validate(day) for day in days]
+
+
+@router.get("/{id_day}/")
+async def get_by_id(
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    id_day: int,
+):
+    return await get_day_by_id(session=session, id_day=id_day)
 
 
 @router.post(
