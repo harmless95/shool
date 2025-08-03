@@ -9,9 +9,10 @@ class StudentBase(BaseModel):
     year_of_birth: date
 
 
-class StudentRead(StudentBase):
+class StudentRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
+    name: str
 
 
 class StudentCreate(StudentBase):
