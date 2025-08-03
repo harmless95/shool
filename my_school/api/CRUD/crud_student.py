@@ -49,3 +49,19 @@ async def create_student(
         await session.refresh(student)
         result = student
     return result
+
+
+async def update_student(
+    data_update: StudentUpdate,
+    session: AsyncSession,
+    data_student: Student,
+    partial: bool = False,
+) -> Student:
+    for name, value in data_update.model_dump(exclude_unset=partial).items():
+        setattr(
+            data_student,
+            name,
+            value,
+        )
+    await session.commit()
+    return data_student
