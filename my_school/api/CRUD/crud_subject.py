@@ -45,3 +45,19 @@ async def create_subject(
         await session.refresh(subject)
         result = subject
     return result
+
+
+async def update_subject(
+    session: AsyncSession,
+    data_subject: SchoolSubject,
+    data_update: SchoolSubjectUpdate,
+    partial: bool = False,
+) -> SchoolSubject:
+    for name, value in data_update.model_dump(exclude_unset=partial).items():
+        setattr(
+            data_subject,
+            name,
+            value,
+        )
+    await session.commit()
+    return data_subject
