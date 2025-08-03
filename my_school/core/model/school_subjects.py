@@ -6,11 +6,16 @@ from .base import Base
 from .students_subject import students_object_table
 
 if TYPE_CHECKING:
+    from .day_school import DaySchool
     from .student import Student
 
 
 class SchoolSubject(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False)
+
+    day_schools: Mapped["DaySchool"] = relationship(
+        "DaySchool", back_populates="subject"
+    )
 
     students: Mapped[list["Student"]] = relationship(
         "Student",

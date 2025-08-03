@@ -9,12 +9,17 @@ from .students_subject import students_object_table
 
 if TYPE_CHECKING:
     from .school_subjects import SchoolSubject
+    from .day_school import DaySchool
 
 
 class Student(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     surname: Mapped[str] = mapped_column(String(150), nullable=False)
     year_of_birth: Mapped[date] = mapped_column(Date, nullable=False)
+
+    day_schools: Mapped["DaySchool"] = relationship(
+        "DaySchool", back_populates="student"
+    )
 
     school_subjects: Mapped[list["SchoolSubject"]] = relationship(
         "SchoolSubject",
