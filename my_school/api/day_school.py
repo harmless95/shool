@@ -25,7 +25,7 @@ async def get_all_day(
 
 @router.post(
     "/",
-    response_model=SchemaDayBase,
+    response_model=SchemaDayRead,
     status_code=status.HTTP_201_CREATED,
 )
 async def create_school_day(
