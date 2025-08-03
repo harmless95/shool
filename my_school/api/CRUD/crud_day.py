@@ -5,7 +5,7 @@ from sqlalchemy import select
 from fastapi import HTTPException, status
 
 from core.model import DaySchool, Student, SchoolSubject
-from core.schemas.schema_day import SchemaDayCreate
+from core.schemas.schema_day import SchemaDayCreate, SchemaDayRead
 
 
 async def get_day_all(session: AsyncSession) -> Sequence[DaySchool]:
@@ -21,7 +21,7 @@ async def get_day_all(session: AsyncSession) -> Sequence[DaySchool]:
     return result.all()
 
 
-async def create_day(session: AsyncSession, data: SchemaDayCreate) -> SchemaDayCreate:
+async def create_day(session: AsyncSession, data: SchemaDayCreate) -> SchemaDayRead:
     stmt_student = select(Student).where(
         Student.name == data.student.name,
         Student.surname == data.student.surname,
@@ -53,10 +53,14 @@ async def create_day(session: AsyncSession, data: SchemaDayCreate) -> SchemaDayC
     )
     session.add(day)
     await session.commit()
-    await session.refresh(day)
-    return SchemaDayCreate(
-        day=day.day,
-        school_assessment=day.school_assessment,
-        student=data.student,
-        subject=data.subject,
+    stmt_day = (
+        select(DaySchool)
+        .options(
+            selectinload(DaySchool.subject),
+            selectinload(DaySchool.student),
+        )
+        .where(DaySchool.id == day.id)
     )
+    result_day = await session.scalars(stmt_day)
+    day = result_day.first()
+    return SchemaDayRead.model_validate(day)
