@@ -50,3 +50,42 @@ async def create_new_subject(
     data: SchoolSubjectCreate,
 ):
     return await create_subject(session=session, data=data)
+
+
+@router.put(
+    "/{id_subject}/",
+    status_code=status.HTTP_200_OK,
+)
+async def update_subject_total(
+    data_update: SchoolSubjectUpdate,
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    data_subject: SchoolSubject = Depends(get_subject_by_id),
+):
+    return await update_subject(
+        session=session, data_subject=data_subject, data_update=data_update
+    )
+
+
+@router.patch(
+    "/{id_subject}/",
+    status_code=status.HTTP_200_OK,
+)
+async def update_subject_partial(
+    data_update: SchoolSubjectUpdate,
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    data_subject: SchoolSubject = Depends(get_subject_by_id),
+):
+    return await update_subject(
+        session=session,
+        data_subject=data_subject,
+        data_update=data_update,
+        partial=True,
+    )
+
+
+@router.delete("/{id_subject}/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_subject(
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    subject: SchoolSubject = Depends(get_subject_by_id),
+) -> None:
+    await session.delete(subject)
