@@ -5,14 +5,18 @@ from sqlalchemy import select
 from fastapi import HTTPException, status
 
 from core.model import DaySchool, Student, SchoolSubject
-from core.schemas.schema_day import SchemaDayCreate, SchemaDayRead
+from core.schemas.schema_day import SchemaDayCreate, SchemaDayRead, SchemaDayUpdate
 
 
 async def get_day_by_id(
     session: AsyncSession,
     id_day,
 ):
-    stmt = select(DaySchool).where(DaySchool.id == id_day)
+    stmt = (
+        select(DaySchool)
+        .options(selectinload(DaySchool.subject), selectinload(DaySchool.student))
+        .where(DaySchool.id == id_day)
+    )
     result = await session.scalars(stmt)
     day = result.first()
     if not day:
@@ -84,3 +88,19 @@ async def create_day(session: AsyncSession, data: SchemaDayCreate) -> SchemaDayR
     result_day = await session.scalars(stmt_day)
     day = result_day.first()
     return SchemaDayRead.model_validate(day)
+
+
+async def update_day(
+    data_update: SchemaDayUpdate,
+    session: AsyncSession,
+    data_day: DaySchool,
+    partial: bool = False,
+) -> DaySchool:
+    for name, value in data_update.model_dump(exclude_unset=partial).items():
+        setattr(
+            data_day,
+            name,
+            value,
+        )
+    await session.commit()
+    return data_day
