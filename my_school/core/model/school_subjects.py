@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 class SchoolSubject(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False)
 
-    student: Mapped[list["Student"]] = relationship(
+    students: Mapped[list["Student"]] = relationship(
         "Student",
         secondary=students_object_table,
-        back_populates="subject_id",
+        back_populates="school_subjects",
     )
