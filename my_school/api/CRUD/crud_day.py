@@ -1,3 +1,4 @@
+from typing import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import HTTPException, status
@@ -6,7 +7,7 @@ from core.model import DaySchool, Student, SchoolSubject
 from core.schemas.schema_day import SchemaDayCreate
 
 
-async def get_day_all(session: AsyncSession):
+async def get_day_all(session: AsyncSession) -> Sequence[DaySchool]:
     stmt = select(DaySchool).order_by(DaySchool.id)
     result = await session.scalars(stmt)
     return result.all()
@@ -39,8 +40,8 @@ async def create_day(session: AsyncSession, data: SchemaDayCreate) -> SchemaDayC
     day = DaySchool(
         day=data.day,
         school_assessment=data.school_assessment,
-        student_id=result_student,
-        subject_id=result_subject,
+        student_id=result_student.id,
+        subject_id=result_subject.id,
     )
     session.add(day)
     await session.commit()
