@@ -2,8 +2,8 @@ from typing import Optional
 from datetime import date
 from pydantic import BaseModel, ConfigDict
 
-from .schema_student import StudentRead
-from .schema_school_subject import SchoolSubjectRead
+from .schema_student import StudentRead, StudentBase
+from .schema_school_subject import SchoolSubjectRead, SchoolSubjectBase
 
 
 class SchemaDayBase(BaseModel):
@@ -20,8 +20,8 @@ class SchemaDayRead(SchemaDayBase):
 
 
 class SchemaDayCreate(SchemaDayBase):
-    student: Optional[StudentRead]
-    subject: Optional[SchoolSubjectRead]
+    student: Optional[StudentBase]
+    subject: Optional[SchoolSubjectBase]
     model_config = ConfigDict(from_attributes=True)
 
 
