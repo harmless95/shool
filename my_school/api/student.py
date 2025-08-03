@@ -47,7 +47,11 @@ async def get_students(
     return students
 
 
-@router.post("/", response_model=StudentRead)
+@router.post(
+    "/",
+    response_model=StudentRead,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_student(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
     data_student: StudentCreate,
