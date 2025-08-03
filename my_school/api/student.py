@@ -58,3 +58,47 @@ async def create_student(
 ) -> Student:
     student = await crud_student_create(session=session, data_student=data_student)
     return student
+
+
+@router.put(
+    "/{id_student}/",
+    status_code=status.HTTP_200_OK,
+)
+async def update_student_total(
+    data_update: StudentUpdate,
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    data_student: Student = Depends(get_student_by_id),
+):
+    return await update_student(
+        data_update=data_update,
+        session=session,
+        data_student=data_student,
+    )
+
+
+@router.patch(
+    "/{id_student}/",
+    status_code=status.HTTP_200_OK,
+)
+async def update_student_partial(
+    data_update: StudentUpdate,
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    data_student: Student = Depends(get_student_by_id),
+):
+    return await update_student(
+        data_update=data_update,
+        session=session,
+        data_student=data_student,
+        partial=True,
+    )
+
+
+@router.delete(
+    "/{id_student}/",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_student_by_id(
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    data_student: Student = Depends(get_student_by_id),
+) -> None:
+    await session.delete(data_student)
