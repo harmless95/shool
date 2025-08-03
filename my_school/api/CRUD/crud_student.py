@@ -1,9 +1,24 @@
 from typing import Sequence
 from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import HTTPException, status
 
 from core.model import Student
-from core.schemas.schema_student import StudentCreate
+from core.schemas.schema_student import StudentCreate, StudentUpdate
+
+
+async def get_student(
+    session: AsyncSession,
+    id_student: int,
+) -> Student:
+    stmt = select(Student).where(Student.id == id_student)
+    result = await session.scalars(stmt)
+    student = result.first()
+    if not student:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="invalid student by id"
+        )
+    return student
 
 
 async def get_students(
