@@ -29,6 +29,11 @@ async def get_subject(
 async def get_all(session: AsyncSession) -> Sequence[SchoolSubject]:
     stmt = select(SchoolSubject).order_by(SchoolSubject.id)
     result = await session.scalars(stmt)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="invalid subject not found",
+        )
     return result.all()
 
 
