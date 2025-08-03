@@ -16,7 +16,9 @@ class DaySchool(Base):
     school_assessment: Mapped[int] = mapped_column(nullable=False)
 
     student_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
-    student: Mapped["Student"] = relationship("Student")
+    student: Mapped["Student"] = relationship("Student", back_populates="day_schools")
 
     subject_id: Mapped[int] = mapped_column(ForeignKey("schoolsubjects.id"))
-    subject: Mapped["SchoolSubject"] = relationship("SchoolSubject")
+    subject: Mapped["SchoolSubject"] = relationship(
+        "SchoolSubject", back_populates="day_schools"
+    )
