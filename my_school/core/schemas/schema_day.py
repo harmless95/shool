@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 from datetime import date
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
-if TYPE_CHECKING:
-    from .schema_student import StudentBase
-    from .schema_school_subject import SchoolSubjectBase
+from .schema_student import StudentBase
+from .schema_school_subject import SchoolSubjectBase
 
 
 class SchemaDayBase(BaseModel):
@@ -14,6 +13,7 @@ class SchemaDayBase(BaseModel):
 
 class SchemaDayRead(SchemaDayBase):
     id: int
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SchemaDayCreate(SchemaDayBase):
