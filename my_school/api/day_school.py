@@ -52,3 +52,47 @@ async def create_school_day(
     data: SchemaDayCreate,
 ) -> SchemaDayRead:
     return await create_day(session=session, data=data)
+
+
+@router.put(
+    "/{id_day}/",
+    status_code=status.HTTP_200_OK,
+)
+async def update_day_total(
+    data_update: SchemaDayUpdate,
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    data_day: DaySchool = Depends(get_by_id),
+):
+    return await update_day(
+        data_update=data_update,
+        session=session,
+        data_day=data_day,
+    )
+
+
+@router.patch(
+    "/{id_day}/",
+    status_code=status.HTTP_200_OK,
+)
+async def update_day_total(
+    data_update: SchemaDayUpdate,
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    data_day: DaySchool = Depends(get_by_id),
+):
+    return await update_day(
+        data_update=data_update,
+        session=session,
+        data_day=data_day,
+        partial=True,
+    )
+
+
+@router.delete(
+    "/{id_day}/",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_day(
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+    data_day: DaySchool = Depends(get_by_id),
+) -> None:
+    await session.delete(data_day)
