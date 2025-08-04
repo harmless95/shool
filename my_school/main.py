@@ -1,12 +1,16 @@
-#!/usr/bin/env python
-
 import uvicorn
+import logging
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from core.config import setting
 from api import router_student, router_day, router_subject
 from core.model import db_helper
+
+logging.basicConfig(
+    level=logging.INFO,
+    format=setting.logging.log_format,
+)
 
 
 @asynccontextmanager
