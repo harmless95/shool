@@ -1,6 +1,8 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_cache.decorator import cache
+from fastapi_cache import FastAPICache
 
 from core.model import db_helper
 from .CRUD.crud_day import get_day_all, create_day, get_day_by_id, update_day
@@ -20,6 +22,7 @@ router = APIRouter(prefix="/day", tags=["Day"])
     response_model=list[SchemaDayRead],
     status_code=status.HTTP_200_OK,
 )
+@cache(expire=60)
 async def get_all_day(
     session: Annotated[
         AsyncSession,
@@ -35,6 +38,7 @@ async def get_all_day(
     response_model=SchemaDayRead,
     status_code=status.HTTP_200_OK,
 )
+@cache(expire=60)
 async def get_by_id(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
     id_day: int,
@@ -51,7 +55,9 @@ async def create_school_day(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
     data: SchemaDayCreate,
 ) -> SchemaDayRead:
-    return await create_day(session=session, data=data)
+    result = await create_day(session=session, data=data)
+    await FastAPICache.clear()
+    return result
 
 
 @router.put(
@@ -63,11 +69,13 @@ async def update_day_total(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
     data_day: DaySchool = Depends(get_by_id),
 ):
-    return await update_day(
+    result = await update_day(
         data_update=data_update,
         session=session,
         data_day=data_day,
     )
+    await FastAPICache.clear()
+    return result
 
 
 @router.patch(
@@ -79,12 +87,14 @@ async def update_day_total(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
     data_day: DaySchool = Depends(get_by_id),
 ):
-    return await update_day(
+    result = await update_day(
         data_update=data_update,
         session=session,
         data_day=data_day,
         partial=True,
     )
+    await FastAPICache.clear()
+    return result
 
 
 @router.delete(
@@ -96,3 +106,4 @@ async def delete_day(
     data_day: DaySchool = Depends(get_by_id),
 ) -> None:
     await session.delete(data_day)
+    await FastAPICache.clear()

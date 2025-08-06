@@ -1,6 +1,8 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_cache import FastAPICache
+from fastapi_cache.decorator import cache
 
 from core.model import db_helper, Student
 from .CRUD.crud_student import (
@@ -25,6 +27,7 @@ router = APIRouter(prefix="/student", tags=["Student"])
     response_model=StudentRead2,
     status_code=status.HTTP_200_OK,
 )
+@cache(expire=60)
 async def get_student_by_id(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
     id_student: int,
@@ -40,6 +43,7 @@ async def get_student_by_id(
     response_model=list[StudentRead2],
     status_code=status.HTTP_200_OK,
 )
+@cache(expire=60)
 async def get_students(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
 ):
@@ -57,6 +61,7 @@ async def create_student(
     data_student: StudentCreate,
 ) -> Student:
     student = await crud_student_create(session=session, data_student=data_student)
+    await FastAPICache.clear()
     return student
 
 
@@ -69,11 +74,14 @@ async def update_student_total(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
     data_student: Student = Depends(get_student_by_id),
 ):
-    return await update_student(
+    result = await update_student(
         data_update=data_update,
         session=session,
         data_student=data_student,
     )
+    await FastAPICache.clear()
+
+    return result
 
 
 @router.patch(
@@ -85,12 +93,14 @@ async def update_student_partial(
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
     data_student: Student = Depends(get_student_by_id),
 ):
-    return await update_student(
+    result = await update_student(
         data_update=data_update,
         session=session,
         data_student=data_student,
         partial=True,
     )
+    await FastAPICache.clear()
+    return result
 
 
 @router.delete(
@@ -102,3 +112,4 @@ async def delete_student_by_id(
     data_student: Student = Depends(get_student_by_id),
 ) -> None:
     await session.delete(data_student)
+    await FastAPICache.clear()
