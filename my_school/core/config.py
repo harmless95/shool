@@ -39,6 +39,13 @@ class DataBaseConfig(BaseModel):
     max_overflow: int = 10
 
 
+class ConfigRedis(BaseSettings):
+    url: str = "redis://localhost"
+    password: str = "password"
+    user: str = "user"
+    user_password: str = "password"
+
+
 class Prefix(BaseModel):
     prefix: str = "/api"
 
@@ -54,6 +61,7 @@ class Setting(BaseSettings):
     run: RunConfig = RunConfig()
     gunicorn: GunicornConfig = GunicornConfig()
     logging: LoggingConfig = LoggingConfig()
+    redis: ConfigRedis = ConfigRedis()
     prefix: Prefix = Prefix()
 
 
