@@ -2,6 +2,10 @@ import uvicorn
 import logging
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+from redis import asyncio as aioredis
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from fastapi_cache.decorator import cache
 
 from core.config import setting
 from api import router_student, router_day, router_subject
@@ -15,7 +19,8 @@ logging.basicConfig(
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # startup
+    redis = aioredis.from_url(setting.redis.url)
+    FastAPICache.init(RedisBackend(redis=redis), prefix="fastapi-cache")
     yield
     # shutdown
     await db_helper.dispose()
@@ -28,6 +33,7 @@ app_main.include_router(router=router_subject)
 
 
 @app_main.get("/")
+@cache(expire=30)
 async def get_hello():
     return {
         "message": "Hello World",
