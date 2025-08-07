@@ -5,13 +5,14 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Date, ForeignKey
 
 from .base import Base
+from .mixins.id_pimary_key import IdIntPrimaryKeyMixin
 
 if TYPE_CHECKING:
     from .student import Student
     from .school_subjects import SchoolSubject
 
 
-class DaySchool(Base):
+class DaySchool(Base, IdIntPrimaryKeyMixin):
     day: Mapped[date] = mapped_column(Date, nullable=False)
     school_assessment: Mapped[int] = mapped_column(nullable=False)
 
