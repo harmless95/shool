@@ -48,6 +48,8 @@ class DataBaseConfig(BaseModel):
 
 class AccessToken(BaseModel):
     lifetime_seconds: int = 3600
+    reset_password_token_secret: str
+    verification_token_secret: str
 
 class ConfigRedis(BaseSettings):
     url: str = "redis://localhost"
@@ -73,7 +75,7 @@ class Setting(BaseSettings):
     logging: LoggingConfig = LoggingConfig()
     redis: ConfigRedis = ConfigRedis()
     prefix: Prefix = Prefix()
-    access_token: AccessToken = AccessToken()
+    access_token: AccessToken
 
 
 setting = Setting()
