@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 
-
 from .base import Base
 from .mixins.id_pimary_key import IdIntPrimaryKeyMixin
 from core.types.user_id import UserIdType
@@ -15,4 +14,4 @@ class User(Base, IdIntPrimaryKeyMixin, SQLAlchemyBaseUserTable[UserIdType]):
 
     @classmethod
     async def get_db(cls, session: "AsyncSession"):
-        return SQLAlchemyUserDatabase(session, User)
+        return SQLAlchemyUserDatabase(session, cls)
