@@ -1,9 +1,15 @@
 from sqlalchemy.orm import declared_attr, Mapped, mapped_column, DeclarativeBase
+from sqlalchemy import MetaData
+
+from core.config import setting
+from utils.convert_file import camel_case_to_snake_case
 
 
 class Base(DeclarativeBase):
     __abstract__ = True
 
+    metadata = MetaData(naming_convention=setting.db.naming_convention)
+
     @declared_attr.directive
     def __tablename__(cls) -> str:
-        return f"{cls.__name__.lower()}s"
+        return f"{camel_case_to_snake_case(cls.__name__)}s"
