@@ -5,6 +5,7 @@ __all__ = (
     "SchoolSubject",
     "students_object_table",
     "DaySchool",
+    "User",
 )
 
 from .base import Base
@@ -13,3 +14,4 @@ from .helper_db import db_helper
 from .school_subjects import SchoolSubject
 from .students_subject import students_object_table
 from .day_school import DaySchool
+from .user import User
