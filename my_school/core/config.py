@@ -19,6 +19,12 @@ class ApiPrefix(BaseModel):
     v1: ApiV1Prefix = ApiV1Prefix()
     v2: ApiV2Prefix = ApiV2Prefix()
 
+    @property
+    def bearer_token_url(self) -> str:
+        parts = (self.prefix, self.v2.prefix, self.v2.auth, "/login")
+        path = "".join(parts)
+        return path.removeprefix("/")
+
 class RunConfig(BaseModel):
     port: int = 8000
     host: str = "0.0.0.0"
