@@ -19,7 +19,7 @@ class DaySchool(Base, IdIntPrimaryKeyMixin):
     student_id: Mapped[int] = mapped_column(ForeignKey("students.id"))
     student: Mapped["Student"] = relationship("Student", back_populates="day_schools")
 
-    subject_id: Mapped[int] = mapped_column(ForeignKey("schoolsubjects.id"))
+    subject_id: Mapped[int] = mapped_column(ForeignKey("school_subjects.id"))
     subject: Mapped["SchoolSubject"] = relationship(
         "SchoolSubject", back_populates="day_schools"
     )

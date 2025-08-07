@@ -22,7 +22,7 @@ class Student(Base, IdIntPrimaryKeyMixin):
         "DaySchool", back_populates="student"
     )
 
-    school_subjects: Mapped[list["SchoolSubject"]] = relationship(
+    subjects: Mapped[list["SchoolSubject"]] = relationship(
         "SchoolSubject",
         secondary=students_object_table,
         back_populates="students",

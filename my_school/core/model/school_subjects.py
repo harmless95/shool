@@ -21,5 +21,5 @@ class SchoolSubject(Base, IdIntPrimaryKeyMixin):
     students: Mapped[list["Student"]] = relationship(
         "Student",
         secondary=students_object_table,
-        back_populates="school_subjects",
+        back_populates="subjects",
     )
