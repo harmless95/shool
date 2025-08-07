@@ -6,6 +6,7 @@ __all__ = (
     "students_object_table",
     "DaySchool",
     "User",
+    "AccessToken",
 )
 
 from .base import Base
@@ -15,3 +16,4 @@ from .school_subjects import SchoolSubject
 from .students_subject import students_object_table
 from .day_school import DaySchool
 from .user import User
+from .access_token import AccessToken
