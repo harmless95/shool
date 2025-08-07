@@ -46,6 +46,8 @@ class DataBaseConfig(BaseModel):
         "pk": "pk_%(table_name)s",
     }
 
+class AccessToken(BaseModel):
+    lifetime_seconds: int = 3600
 
 class ConfigRedis(BaseSettings):
     url: str = "redis://localhost"
@@ -71,6 +73,7 @@ class Setting(BaseSettings):
     logging: LoggingConfig = LoggingConfig()
     redis: ConfigRedis = ConfigRedis()
     prefix: Prefix = Prefix()
+    access_token: AccessToken = AccessToken()
 
 
 setting = Setting()
