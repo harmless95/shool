@@ -5,7 +5,7 @@ from fastapi_cache.decorator import cache
 from fastapi_cache import FastAPICache
 
 from core.model import db_helper
-from .CRUD.crud_day import get_day_all, create_day, get_day_by_id, update_day
+from api.CRUD.crud_day import get_day_all, create_day, get_day_by_id, update_day
 from core.schemas.schema_day import (
     SchemaDayCreate,
     SchemaDayBase,

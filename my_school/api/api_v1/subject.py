@@ -5,7 +5,7 @@ from fastapi_cache.decorator import cache
 from fastapi_cache import FastAPICache
 
 from core.model import db_helper, SchoolSubject
-from .CRUD.crud_subject import create_subject, get_all, get_subject, update_subject
+from api.CRUD.crud_subject import create_subject, get_all, get_subject, update_subject
 from core.schemas.schema_school_subject import (
     SchoolSubjectCreate,
     SchoolSubjectRead,

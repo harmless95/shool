@@ -5,7 +5,7 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.decorator import cache
 
 from core.model import db_helper, Student
-from .CRUD.crud_student import (
+from api.CRUD.crud_student import (
     get_students as crud_students,
     create_student as crud_student_create,
     get_student,
