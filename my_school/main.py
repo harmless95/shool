@@ -8,7 +8,7 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
 
 from core.config import setting
-from api import router_student, router_day, router_subject, routers_v2
+from api import router_all_api
 from core.model import db_helper
 
 logging.basicConfig(
@@ -27,10 +27,7 @@ async def lifespan(app: FastAPI):
 
 
 app_main = FastAPI(lifespan=lifespan)
-app_main.include_router(router=router_student)
-app_main.include_router(router=router_day)
-app_main.include_router(router=router_subject)
-app_main.include_router(router=routers_v2)
+app_main.include_router(router=router_all_api)
 
 
 @app_main.get("/")
