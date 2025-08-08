@@ -2,8 +2,7 @@ import asyncio
 import contextlib
 from os import getenv
 
-from api.dependencies.auntification.users import get_user_db
-from api.dependencies.auntification.user_manager import get_usermanager
+from api.dependencies.auntification import get_user_db, get_usermanager
 from core.auntefication.user_manager import UserManager
 from core.schemas.users import UserCreate
 from core.model import User, db_helper
