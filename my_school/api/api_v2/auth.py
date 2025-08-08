@@ -23,3 +23,8 @@ router.include_router(
         UserCreate,
     )
 )
+# /request-verify-token
+# /verify
+router.include_router(
+    router=fastapi_users_router.get_verify_router(UserRead),
+)
